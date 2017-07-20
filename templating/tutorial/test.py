@@ -9,13 +9,30 @@ class TutorialViewTests(unittest.TestCase):
     def tearDown(self):
         testing.tearDown()
 
-    def test_hello_world(self):
-        from tutorial import hello_world
+    def test_home(self):
+        from .views import home
 
         request = testing.DummyRequest()
-        response = hello_world(request)
+        response = home(request)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual('Home View', response['name'])
+
+    def test_hello(self):
+        from .views import hello
+
+        request = testing.DummyRequest()
+        response = hello(request)
+
+        self.assertEqual('Hello View', response['name'])
+
+
+    # def test_hello_world(self):
+    #     from tutorial import hello_world
+    #
+    #     request = testing.DummyRequest()
+    #     response = hello_world(request)
+    #
+    #     self.assertEqual(response.status_code, 200)
 
 class TutorialFunctionalTests(unittest.TestCase):
     def setUp(self):
@@ -25,7 +42,16 @@ class TutorialFunctionalTests(unittest.TestCase):
 
         self.testapp = TestApp(app)
 
-    def test_hello_world(self):
+    # def test_hello_world(self):
+    #     res = self.testapp.get('/', status=200)
+    #     self.assertIn(b'<h1>Hello World!</h1>', res.body)
+    #
+
+    def test_home(self):
         res = self.testapp.get('/', status=200)
-        self.assertIn(b'<h1>Hello World!</h1>', res.body)
+        self.assertIn(b'<h1>Hi Home View', res.body)
+
+    def test_hello(self):
+        res = self.testapp.get('/howdy', status=200)
+        self.assertIn(b'<h1>Hi Hello View', res.body)
 
